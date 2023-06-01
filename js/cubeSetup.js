@@ -1,4 +1,4 @@
-export function sideHandeling(cubeGroup, three, Side) {
+export function sideHandeling(cubeGroup, three, Side, direction) {
   const rotationSpeed = 0.01;
 
   let isDragging = false;
@@ -63,11 +63,17 @@ export function sideHandeling(cubeGroup, three, Side) {
       const isCursorObstructed = intersects.length > 0 && intersects[0].object !== cube;
 
       if (!isCursorObstructed) {
+        const cube = cubeGroup.children[Side];
+        if (direction === 'y'){
         cube.rotation.y += deltaX * rotationSpeed;
-
-        const newXRotation = cube.rotation.x + deltaY * rotationSpeed;
-        cube.rotation.x = Math.max(-Math.PI / 3.5, Math.min(Math.PI / 3.5, newXRotation));
-      } else {
+        } else if (direction === 'x'){
+          cube.rotation.x += deltaX * rotationSpeed;
+        } else if (direction === 'z'){
+          cube.rotation.z += deltaX * rotationSpeed;
+        }
+      }
+      
+       else {
         isIntersectionDetected = true;
         return;
       }

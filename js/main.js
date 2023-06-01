@@ -85,7 +85,7 @@ var geometry = new THREE.BoxGeometry(2.9, 0.1, 2.9);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 var rubicsCubeHitboxTop = new THREE.Mesh(geometry, materials);
 rubicsCubeHitboxTop.visible = true;
-rubicsCubeHitboxTop.position.set(0,1.45,0)
+rubicsCubeHitboxTop.position.set(0,1.5,0)
 cubeGroup.add(rubicsCubeHitboxTop)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
@@ -97,26 +97,26 @@ cubeGroup.add(rubicsCubeHitboxBottom)
 var geometry = new THREE.BoxGeometry(2.9, 2.9, 0.1);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 var rubicsCubeHitboxNorth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxNorth.visible = false;
+rubicsCubeHitboxNorth.visible = true;
 rubicsCubeHitboxNorth.position.set(0,0,-1.45)
 cubeGroup.add(rubicsCubeHitboxNorth)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 var rubicsCubeHitboxSouth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxSouth.visible = false;
+rubicsCubeHitboxSouth.visible = true;
 rubicsCubeHitboxSouth.position.set(0,0,1.45)
 cubeGroup.add(rubicsCubeHitboxSouth)
 
 var geometry = new THREE.BoxGeometry(0.1, 2.9, 2.9);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 var rubicsCubeHitboxWest = new THREE.Mesh(geometry, material);
-rubicsCubeHitboxWest.visible = false;
+rubicsCubeHitboxWest.visible = true;
 rubicsCubeHitboxWest.position.set(-1.45,0,0)
 cubeGroup.add(rubicsCubeHitboxWest)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 var rubicsCubeHitboxEast = new THREE.Mesh(geometry, material);
-rubicsCubeHitboxEast.visible = false;
+rubicsCubeHitboxEast.visible = true;
 rubicsCubeHitboxEast.position.set(1.45,0,0)
 cubeGroup.add(rubicsCubeHitboxEast)
 
@@ -138,10 +138,14 @@ cubeGroup.add(rubicsCubeHitboxEast)
 
 three.scene.add(cubeGroup);
 
-cubeGroup.children[32].position.set(0, 4, 0);
+cubeGroup.children[31].position.set(0, 4, 0);
 
-
-sideHandeling(cubeGroup, three, 32)
+sideHandeling(cubeGroup, three, 31, "y")
+sideHandeling(cubeGroup, three, 32, "y")
+sideHandeling(cubeGroup, three, 33, "z")
+sideHandeling(cubeGroup, three, 34, "z")
+sideHandeling(cubeGroup, three, 35, "x")
+sideHandeling(cubeGroup, three, 36, "x")
 
 mainRotation(cubeGroup, three)
 
