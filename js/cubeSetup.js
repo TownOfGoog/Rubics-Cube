@@ -1,4 +1,4 @@
-export function sideHandeling(cubeGroup, three, Side, direction) {
+export function sideHandeling(cubeGroup, three, Side, direction, sideHitboxes, segmentHitboxes) {
   const rotationSpeed = 0.01;
 
   const intersectionGroup = new THREE.Group();
@@ -73,6 +73,7 @@ export function sideHandeling(cubeGroup, three, Side, direction) {
       const deltaY = event.clientY - previousMouseY;
   
       const cube = cubeGroup.children[Side];
+      const hitbox = sideHitboxes[Side-30];
   
       const mouse = new THREE.Vector2();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -86,18 +87,58 @@ export function sideHandeling(cubeGroup, three, Side, direction) {
   
       const isCursorObstructed = intersects.length > 0 && intersects[0].object !== cube;
   
-      if (!isCursorObstructed) {
-        if (direction === 'y') {
-          cube.rotation.y += deltaX * rotationSpeed;
-        } else if (direction === 'x') {
-          cube.rotation.x += deltaX * rotationSpeed;
-        } else if (direction === 'z') {
-          cube.rotation.z += deltaX * rotationSpeed;
+      const sideBoundingBoxToCheck = hitbox
+      const intersections = [];
+
+      for (let i = 0; i < segmentHitboxes.length; i++) {
+        let boundingBox = segmentHitboxes[i];
+      
+        if (boundingBox.intersectsBox(sideBoundingBoxToCheck)) {
+          // Intersection detected
+          intersections.push(i);
         }
-      } else {
-        isIntersectionDetected = true;
-        return;
       }
+      
+
+      
+      console.log("Intersecting BoundingBoxes:", intersections);
+
+
+if (!isCursorObstructed) {
+  if (direction === 'y') {
+    cube.rotation.y += deltaX * rotationSpeed;
+  } else if (direction === 'x') {
+    cube.rotation.x += deltaX * rotationSpeed;
+  } else if (direction === 'z') {
+    cube.rotation.z += deltaX * rotationSpeed;
+  }
+
+  for (let i = 0; i < intersections.length; i++) {
+    let segment = cubeGroup.children[intersections[i]];
+
+    // Calculate the offset between the segment and the cube
+    let offset = new THREE.Vector3().subVectors(segment.position, cube.position);
+
+    if (direction === 'y') {
+      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), deltaX * rotationSpeed);
+      segment.rotateY(deltaX * rotationSpeed);
+    } else if (direction === 'x') {
+      offset.applyAxisAngle(new THREE.Vector3(1, 0, 0), deltaX * rotationSpeed);
+      segment.rotateX(deltaX * rotationSpeed);
+    } else if (direction === 'z') {
+      offset.applyAxisAngle(new THREE.Vector3(0, 0, 1), deltaX * rotationSpeed);
+      segment.rotateZ(deltaX * rotationSpeed);
+    }
+
+    // Set the new position for the segment
+    segment.position.copy(cube.position).add(offset);
+  }
+} else {
+  isIntersectionDetected = true;
+  return;
+}
+
+      
   
       previousMouseX = event.clientX;
       previousMouseY = event.clientY;

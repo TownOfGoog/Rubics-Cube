@@ -5,8 +5,11 @@ const three = new Threestrap.Bootstrap();
 
 var cubes = [];
 var BoundingBoxes = [];
+var sideBoundingBoxes = [];
 
-for (var i = 1; i <= 28; i++) {
+
+
+for (var i = 1; i <= 31; i++) {
   var geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
   var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
   var cube = new THREE.Mesh(geometry, material);
@@ -49,11 +52,7 @@ for (var q = -1; q <= 1; q++) {
 }
 
 
-for (var i = 1; i <= 28; i++) {
-  let BoundingBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-  BoundingBox.setFromObject(cubes[i-1]);
-  BoundingBoxes.push(BoundingBox);
-}
+
 
 const lineGeometryZ = new THREE.BufferGeometry().setFromPoints([
   new THREE.Vector3(0, -1.5, 0), 
@@ -82,41 +81,41 @@ cubeGroup.add(...[artificialZAxis, artificialXAxis, artificialYAxis]);
 
 
 var geometry = new THREE.BoxGeometry(2.8, 0.1, 2.8);
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxTop = new THREE.Mesh(geometry, materials);
 rubicsCubeHitboxTop.visible = true;
 rubicsCubeHitboxTop.position.set(0,1.45,0)
 cubeGroup.add(rubicsCubeHitboxTop)
 
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxBottom = new THREE.Mesh(geometry, materials);
 rubicsCubeHitboxBottom.visible = true;
 rubicsCubeHitboxBottom.position.set(0,-1.45,0)
 cubeGroup.add(rubicsCubeHitboxBottom)
 
 var geometry = new THREE.BoxGeometry(2.8, 2.8, 0.1);
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxNorth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxNorth.visible = true;
+rubicsCubeHitboxNorth.visible = true; 
 rubicsCubeHitboxNorth.position.set(0,0,-1.45)
 cubeGroup.add(rubicsCubeHitboxNorth)
 
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxSouth = new THREE.Mesh(geometry, materials);
 rubicsCubeHitboxSouth.visible = true;
 rubicsCubeHitboxSouth.position.set(0,0,1.45)
 cubeGroup.add(rubicsCubeHitboxSouth)
 
 var geometry = new THREE.BoxGeometry(0.1, 2.8, 2.8);
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 1, visible: true });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxWest = new THREE.Mesh(geometry, material);
 rubicsCubeHitboxWest.visible = true;
 rubicsCubeHitboxWest.position.set(-1.45,0,0)
 cubeGroup.add(rubicsCubeHitboxWest)
 
-var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 1, visible: true });
+var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxEast = new THREE.Mesh(geometry, material);
-rubicsCubeHitboxEast.visible = true;
+rubicsCubeHitboxEast.visible = false;
 rubicsCubeHitboxEast.position.set(1.45,0,0)
 cubeGroup.add(rubicsCubeHitboxEast)
 
@@ -128,6 +127,11 @@ BoundingBox2.setFromObject(cubeGroup.children[33])
 
 
 
+for (var i = 1; i < 7; i++) {
+  let sideBoundingBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+  sideBoundingBox.setFromObject(cubeGroup.children[i+29]);
+  sideBoundingBoxes.push(sideBoundingBox);
+}
 
 
 
@@ -135,25 +139,18 @@ BoundingBox2.setFromObject(cubeGroup.children[33])
 
 
 
-const sideGroup = new THREE.Group();
-sideGroup.add(cubeGroup.children[1].clone());
-sideGroup.add(cubeGroup.children[0].clone());
-sideGroup.add(cubeGroup.children[2].clone());
-
+for (var i = 1; i <= 28; i++) {
+  let BoundingBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+  BoundingBox.setFromObject(cubes[i-1]);
+  BoundingBoxes.push(BoundingBox);
+}
 
 three.scene.add(cubeGroup);
 
 
 
 
-sideHandeling(cubeGroup, three, 30, "y")
-sideHandeling(cubeGroup, three, 31, "y")
-sideHandeling(cubeGroup, three, 32, "z")
-sideHandeling(cubeGroup, three, 33, "z")
-sideHandeling(cubeGroup, three, 34, "x")
-sideHandeling(cubeGroup, three, 35, "x")
 
-mainRotation(cubeGroup, three)
 
 
 
@@ -173,59 +170,90 @@ window.addEventListener('resize', onWindowResize);
 
 
 
+sideHandeling(cubeGroup, three, 30, "y", sideBoundingBoxes, BoundingBoxes)
+sideHandeling(cubeGroup, three, 31, "y", sideBoundingBoxes, BoundingBoxes)
+sideHandeling(cubeGroup, three, 32, "z", sideBoundingBoxes, BoundingBoxes)
+sideHandeling(cubeGroup, three, 33, "z", sideBoundingBoxes, BoundingBoxes)
+sideHandeling(cubeGroup, three, 34, "x", sideBoundingBoxes, BoundingBoxes)
+sideHandeling(cubeGroup, three, 35, "x", sideBoundingBoxes, BoundingBoxes)
+
+mainRotation(cubeGroup, three)
+
 
 function animate() {
   renderer.render(three.scene, three.camera);
   requestAnimationFrame(animate);
 
-  
-
-// Remove the loop that creates additional bounding box wireframes
-for (var i = 1; i <= 27; i++) {
-  // Update the bounding box
-  BoundingBoxes[i - 1].copy(cubeGroup.children[i - 1].geometry.boundingBox).applyMatrix4(cubeGroup.children[i - 1].matrixWorld);
-
   // Remove previous wireframe representations
-  if (cubeGroup.children[i - 1].children.length > 0) {
-    const previousWireframes = cubeGroup.children[i - 1].children.filter(child => child.isWireframe);
-    cubeGroup.children[i - 1].remove(...previousWireframes);
+  cubeGroup.traverse(child => {
+    if (child.isWireframe) {
+      child.parent.remove(child);
+    }
+  });
+
+  // Create and display bounding box wireframes for cubes
+  for (let i = 0; i < 27; i++) {
+    const boundingBox = BoundingBoxes[i];
+    const cube = cubeGroup.children[i];
+    
+    // Create a fixed size wireframe geometry
+    const fixedSize = new THREE.Vector3(1.0, 1.0, 1.0);
+    const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    const boundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+    boundingBoxWireframe.isWireframe = true;
+
+    // Set the position of the bounding box wireframe to match the cube's position
+    boundingBoxWireframe.position.copy(cube.position);
+
+    // Add the bounding box wireframe as a child to the cube
+    cube.add(boundingBoxWireframe);
   }
 
-  // Create a fixed size wireframe geometry
-  const fixedSize = new THREE.Vector3(1.0, 1.0, 1.0); // Set your desired fixed size here
-  const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
-  const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-  const boundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-  boundingBoxWireframe.isWireframe = true;
+  // Create and display bounding box wireframes for sides
+  for (let i = 0; i < 7; i++) {
+    const sideBoundingBox = sideBoundingBoxes[i];
+    const sideCube = cubeGroup.children[i + 29];
 
-  // Set the position of the bounding box wireframe to match the object's position
-  boundingBoxWireframe.position.copy(cubeGroup.children[i - 1].position);
+    // Create a fixed size wireframe geometry
+    const fixedSize = new THREE.Vector3(3.1, 3.1, 3.1);
+    const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const sideBoundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+    sideBoundingBoxWireframe.isWireframe = true;
 
-  // Add the bounding box wireframe as a child to the object
-  cubeGroup.children[i - 1].add(boundingBoxWireframe);
-}
+    // Set the position of the bounding box wireframe to match the side cube's position
+    sideBoundingBoxWireframe.position.copy(sideCube.position);
+
+    // Add the bounding box wireframe as a child to the side cube
+    sideCube.add(sideBoundingBoxWireframe);
+  }
 
 
+  // Update bounding box positions
 
-BoundingBox1.add(boundingBoxWireframe)
+  const sideBoundingBoxToCheck = sideBoundingBoxes[1];
 
-
-
-  BoundingBox1.setFromObject(cubeGroup.children[31])
-  BoundingBox2.setFromObject(cubeGroup.children[33])
-  BoundingBoxes[22].copy( cubeGroup.children[22].geometry.boundingBox ).applyMatrix4( cubeGroup.children[22].matrixWorld );
-  BoundingBox1.copy( cubeGroup.children[31].geometry.boundingBox ).applyMatrix4( cubeGroup.children[31].matrixWorld );
-  console.log(BoundingBox1)
-  if(BoundingBoxes[22].intersectsBox(BoundingBox1)){
-    console.log("intersecting jojojojojo")
-  } 
-  cubeGroup.children[11].position.set(0,4,0)
+  for (let i = 0; i < BoundingBoxes.length; i++) {
+    const boundingBox = BoundingBoxes[i];
   
+    if (boundingBox.intersectsBox(sideBoundingBoxToCheck)) {
+      // Intersection detected
+      //   console.log(`BoundingBox ${i} intersects with sideBoundingBoxes[1]`);
+      
+      // Perform further actions or modifications based on the intersection
+      // For example, you can access the corresponding cube using cubeGroup.children[i]
+    }
+  }
+  
+  
+  // Example cube position update
 }
+
 
 
 
 
 
 // Pixel renderer
-requestAnimationFrame(animate());
+//requestAnimationFrame(animate());
