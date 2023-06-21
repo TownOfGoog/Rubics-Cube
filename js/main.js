@@ -83,33 +83,33 @@ cubeGroup.add(...[artificialZAxis, artificialXAxis, artificialYAxis]);
 var geometry = new THREE.BoxGeometry(2.8, 0.1, 2.8);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxTop = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxTop.visible = true;
+rubicsCubeHitboxTop.visible = false;
 rubicsCubeHitboxTop.position.set(0,1.45,0)
 cubeGroup.add(rubicsCubeHitboxTop)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxBottom = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxBottom.visible = true;
+rubicsCubeHitboxBottom.visible = false;
 rubicsCubeHitboxBottom.position.set(0,-1.45,0)
-cubeGroup.add(rubicsCubeHitboxBottom)
+cubeGroup.add(rubicsCubeHitboxBottom) 
 
 var geometry = new THREE.BoxGeometry(2.8, 2.8, 0.1);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxNorth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxNorth.visible = true; 
+rubicsCubeHitboxNorth.visible = false; 
 rubicsCubeHitboxNorth.position.set(0,0,-1.45)
 cubeGroup.add(rubicsCubeHitboxNorth)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxSouth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxSouth.visible = true;
+rubicsCubeHitboxSouth.visible = false;
 rubicsCubeHitboxSouth.position.set(0,0,1.45)
 cubeGroup.add(rubicsCubeHitboxSouth)
 
 var geometry = new THREE.BoxGeometry(0.1, 2.8, 2.8);
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxWest = new THREE.Mesh(geometry, material);
-rubicsCubeHitboxWest.visible = true;
+rubicsCubeHitboxWest.visible = false;
 rubicsCubeHitboxWest.position.set(-1.45,0,0)
 cubeGroup.add(rubicsCubeHitboxWest)
 
