@@ -1,17 +1,17 @@
 export function sideHandeling(cubeGroup, three, Side, direction, sideHitboxes, segmentHitboxes) {
   const rotationSpeed = 0.01;
 
-  const intersectionGroup = new THREE.Group();
-  const followGroup = new THREE.Group(); // Group to hold the objects that follow the rotating object
+  let intersectionGroup = new THREE.Group();
+  let followGroup = new THREE.Group(); // Group to hold the objects that follow the rotating object
 
   function checkIntersections(cubeGroup, Side) {
     intersectionGroup.clear(); // Clear the intersection group
 
     for (let i = 0; i < 26; i++) {
-      const cube = cubeGroup.children[i];
+      let cube = cubeGroup.children[i];
 
       // Check for intersection between cube and cube32
-      const intersection = checkIntersection(cube, cubeGroup.children[Side]);
+      let intersection = checkIntersection(cube, cubeGroup.children[Side]);
       if (intersection) {
         intersectionGroup.add(cube); // Add intersecting objects to the intersection group
       }
@@ -82,23 +82,29 @@ export function sideHandeling(cubeGroup, three, Side, direction, sideHitboxes, s
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, three.camera);
   
-      const intersects = [];
+      let intersects = [];
       raycaster.intersectObject(cubeGroup, true, intersects);
   
       const isCursorObstructed = intersects.length > 0 && intersects[0].object !== cube;
   
       const sideBoundingBoxToCheck = hitbox
-      const intersections = [];
+      let intersections = [];
 
-      for (let i = 0; i < segmentHitboxes.length; i++) {
-        let boundingBox = segmentHitboxes[i];
-      
-        if (boundingBox.intersectsBox(sideBoundingBoxToCheck)) {
-          // Intersection detected
-          intersections.push(i);
-        }
+
+
+      //PROBLEM PROBLEM PROBLEM PROBLEM
+
+      for (let i = 0; i < 27; i++) {
+          let cube = cubeGroup.children[i];
+          let boundingBox = cube.geometry.boundingBox.clone().applyMatrix4(cube.matrixWorld);
+        
+          if (cube !== cubeGroup.children[Side] && boundingBox.intersectsBox(sideBoundingBoxToCheck)) {
+            // Intersection detected
+            intersections.push(i);
+          }
+        
       }
-      
+      //PROBLEM PROBLEM PROBLEM PROBLEM
 
       
       console.log("Intersecting BoundingBoxes:", intersections);

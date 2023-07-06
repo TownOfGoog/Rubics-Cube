@@ -102,7 +102,7 @@ cubeGroup.add(rubicsCubeHitboxNorth)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxSouth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxSouth.visible = false;
+rubicsCubeHitboxSouth.visible = true;
 rubicsCubeHitboxSouth.position.set(0,0,1.45)
 cubeGroup.add(rubicsCubeHitboxSouth)
 
@@ -194,57 +194,39 @@ function animate() {
   // Create and display bounding box wireframes for cubes
   for (let i = 0; i < 27; i++) {
     const boundingBox = BoundingBoxes[i];
-    const cube = cubeGroup.children[i];
-    
-    // Create a fixed size wireframe geometry
+    const cube = cubeGroup.children[i + 1];
+  
     const fixedSize = new THREE.Vector3(1.0, 1.0, 1.0);
     const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
-    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Remove the wireframe: true property
     const boundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
     boundingBoxWireframe.isWireframe = true;
-
-    // Set the position of the bounding box wireframe to match the cube's position
+    boundingBoxWireframe.copy
+  
     boundingBoxWireframe.position.copy(cube.position);
-
-    // Add the bounding box wireframe as a child to the cube
     cube.add(boundingBoxWireframe);
   }
-
-  // Create and display bounding box wireframes for sides
+  
   for (let i = 0; i < 7; i++) {
     const sideBoundingBox = sideBoundingBoxes[i];
     const sideCube = cubeGroup.children[i + 29];
-
-    // Create a fixed size wireframe geometry
+  
     const fixedSize = new THREE.Vector3(3.1, 3.1, 3.1);
     const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
-    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Remove the wireframe: true property
     const sideBoundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
     sideBoundingBoxWireframe.isWireframe = true;
-
-    // Set the position of the bounding box wireframe to match the side cube's position
+  
     sideBoundingBoxWireframe.position.copy(sideCube.position);
-
-    // Add the bounding box wireframe as a child to the side cube
     sideCube.add(sideBoundingBoxWireframe);
   }
+  
 
 
   // Update bounding box positions
 
-  const sideBoundingBoxToCheck = sideBoundingBoxes[1];
 
-  for (let i = 0; i < BoundingBoxes.length; i++) {
-    const boundingBox = BoundingBoxes[i];
-  
-    if (boundingBox.intersectsBox(sideBoundingBoxToCheck)) {
-      // Intersection detected
-      //   console.log(`BoundingBox ${i} intersects with sideBoundingBoxes[1]`);
-      
-      // Perform further actions or modifications based on the intersection
-      // For example, you can access the corresponding cube using cubeGroup.children[i]
-    }
-  }
+
   
   
   // Example cube position update
