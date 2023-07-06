@@ -139,6 +139,11 @@ if (!isCursorObstructed) {
     // Set the new position for the segment
     segment.position.copy(cube.position).add(offset);
   }
+  cube.rotation.y = Math.round(cube.rotation.y / (Math.PI / 2)) * (Math.PI / 2);
+  cube.rotation.x = Math.round(cube.rotation.x / (Math.PI / 2)) * (Math.PI / 2);
+  cube.rotation.z = Math.round(cube.rotation.z / (Math.PI / 2)) * (Math.PI / 2);
+
+  
 } else {
   isIntersectionDetected = true;
   return;
@@ -171,6 +176,7 @@ if (!isCursorObstructed) {
       isCursorOverCube = false;
       isLeftClickPressed = false; // Reset the left-click flag when the mouse button is released
       waitForLeftClickRelease(); // Start waiting for left-click release
+
     }
   }
 }

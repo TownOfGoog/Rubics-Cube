@@ -1,5 +1,6 @@
 import { mainRotation } from './mainRotation.js';
-import { sideHandeling } from './cubeSetup.js'
+import { sideHandeling } from './cubeSetup.js';
+
 const three = new Threestrap.Bootstrap();
 
 
@@ -102,7 +103,7 @@ cubeGroup.add(rubicsCubeHitboxNorth)
 
 var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, visible: false });
 var rubicsCubeHitboxSouth = new THREE.Mesh(geometry, materials);
-rubicsCubeHitboxSouth.visible = true;
+rubicsCubeHitboxSouth.visible = false;
 rubicsCubeHitboxSouth.position.set(0,0,1.45)
 cubeGroup.add(rubicsCubeHitboxSouth)
 
@@ -184,42 +185,16 @@ function animate() {
   renderer.render(three.scene, three.camera);
   requestAnimationFrame(animate);
 
-  // Remove previous wireframe representations
-  cubeGroup.traverse(child => {
-    if (child.isWireframe) {
-      child.parent.remove(child);
-    }
-  });
+// Remove previous wireframe representations
+cubeGroup.traverse(child => {
+  if (child.isWireframe) {
+    child.parent.remove(child);
+  }
+});
 
-  // Create and display bounding box wireframes for cubes
-  for (let i = 0; i < 27; i++) {
-    const boundingBox = BoundingBoxes[i];
-    const cube = cubeGroup.children[i + 1];
-  
-    const fixedSize = new THREE.Vector3(1.0, 1.0, 1.0);
-    const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
-    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Remove the wireframe: true property
-    const boundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-    boundingBoxWireframe.isWireframe = true;
-    boundingBoxWireframe.copy
-  
-    boundingBoxWireframe.position.copy(cube.position);
-    cube.add(boundingBoxWireframe);
-  }
-  
-  for (let i = 0; i < 7; i++) {
-    const sideBoundingBox = sideBoundingBoxes[i];
-    const sideCube = cubeGroup.children[i + 29];
-  
-    const fixedSize = new THREE.Vector3(3.1, 3.1, 3.1);
-    const wireframeGeometry = new THREE.BoxGeometry().scale(fixedSize.x, fixedSize.y, fixedSize.z);
-    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Remove the wireframe: true property
-    const sideBoundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-    sideBoundingBoxWireframe.isWireframe = true;
-  
-    sideBoundingBoxWireframe.position.copy(sideCube.position);
-    sideCube.add(sideBoundingBoxWireframe);
-  }
+
+// Create and display bounding box wireframes for cubes
+
   
 
 
@@ -231,7 +206,49 @@ function animate() {
   
   // Example cube position update
 }
+function updateBoundingBoxPositions() {
+  // Remove previous wireframe representations
+  cubeGroup.traverse(child => {
+    if (child.isWireframe) {
+      child.parent.remove(child);
+    }
+  });
 
+  // Create and display bounding box wireframes for cubes
+  for (let i = 0; i < 27; i++) {
+    const boundingBox = BoundingBoxes[i];
+    const cube = cubeGroup.children[i + 1];
+
+    const fixedSize = new THREE.Vector3(1.0, 1.0, 1.0);
+    const wireframeGeometry = new THREE.BoxBufferGeometry(fixedSize.x, fixedSize.y, fixedSize.z);
+    wireframeGeometry.scale(fixedSize.x, fixedSize.y, fixedSize.z);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const boundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+    boundingBoxWireframe.isWireframe = true;
+
+    boundingBoxWireframe.position.copy(cube.position);
+    three.scene.add(boundingBoxWireframe);
+  }
+
+  for (let i = 0; i < 7; i++) {
+    const sideBoundingBox = sideBoundingBoxes[i];
+    const sideCube = cubeGroup.children[i + 29];
+
+    const fixedSize = new THREE.Vector3(3.1, 3.1, 3.1);
+    const wireframeGeometry = new THREE.BoxBufferGeometry(fixedSize.x, fixedSize.y, fixedSize.z);
+    wireframeGeometry.scale(fixedSize.x, fixedSize.y, fixedSize.z);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const sideBoundingBoxWireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+    sideBoundingBoxWireframe.isWireframe = true;
+
+    sideBoundingBoxWireframe.position.copy(sideCube.position);
+    three.scene.add(sideBoundingBoxWireframe);
+  }
+}
+
+
+// Call the function to update bounding box positions
+updateBoundingBoxPositions();
 
 
 
